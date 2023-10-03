@@ -21,38 +21,68 @@ public_users.post("/register", (req,res) => {
   return res.status(404).json({message: "Unable to register user."});
 });
 
-app.get("/auth/get_message", (req,res) => {
-  return res.status(200).json({message: "Hello, You are an authenticated user. Congratulations!"});
-});
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  res.send(JSON.stringify(books));
+  return res.status(200).json({message: "OK"});
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  if (req.params.isbn in books) 
+  {
+    res.send(JSON.stringify(books[req.params.isbn]));
+    return res.status(200).json({message: "OK"});
+  }
+  
+  return res.status(404).json({message: "ISBN not found"});
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let resBooks = [];
+  for (const bk in books)
+  {
+    if (bk.author === req.params.author)
+    {
+      resBooks.push(bk);
+    }
+  }
+
+  res.send(JSON.stringify(resBooks));
+  return res.status(200).json({message: "OK"});
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let resBooks = [];
+  for (const bk in books)
+  {
+    if (bk.title === req.params.title)
+    {
+      resBooks.push(bk);
+    }
+  }
+
+  res.send(JSON.stringify(resBooks));
+  return res.status(200).json({message: "OK"});
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  if (req.params.isbn in books) 
+  {
+    res.send(JSON.stringify(books[req.params.isbn].reviews));
+    return res.status(200).json({message: "OK"});
+  }
+  
+  return res.status(404).json({message: "ISBN not found"});
 });
 
 module.exports.general = public_users;
