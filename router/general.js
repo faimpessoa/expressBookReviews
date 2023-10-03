@@ -11,7 +11,7 @@ public_users.post("/register", (req,res) => {
   const password = req.query.password;
 
   if (username && password) {
-    if (!doesExist(username)) { 
+    if (!isValid(username)) { 
       users.push({"username":username,"password":password});
       return res.status(200).json({message: "User successfully registred. Now you can login"});
     } else {
@@ -47,9 +47,9 @@ public_users.get('/author/:author',function (req, res) {
   let resBooks = [];
   for (const bk in books)
   {
-    if (bk.author === req.params.author)
+    if (books[bk].author == req.params.author)
     {
-      resBooks.push(bk);
+      resBooks.push(books[bk]);
     }
   }
 
@@ -63,9 +63,9 @@ public_users.get('/title/:title',function (req, res) {
   let resBooks = [];
   for (const bk in books)
   {
-    if (bk.title === req.params.title)
+    if (books[bk].title === req.params.title)
     {
-      resBooks.push(bk);
+      resBooks.push(books[bk]);
     }
   }
 
@@ -78,11 +78,17 @@ public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
   if (req.params.isbn in books) 
   {
-    res.send(JSON.stringify(books[req.params.isbn].reviews));
-    return res.status(200).json({message: "OK"});
+    let resRevs = [];
+    for (rev in books[req.params.isbn].reviews)
+    {
+        resRevs.push(books[req.params.isbn].reviews[rev]);
+    }
+    return res.send(JSON.stringify(resRevs)).status(200);
   }
-  
-  return res.status(404).json({message: "ISBN not found"});
+  else
+  {
+    return res.status(404).json({message: "ISBN not found"});
+  }
 });
 
 module.exports.general = public_users;
