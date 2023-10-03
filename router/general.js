@@ -74,12 +74,7 @@ public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
   if (req.params.isbn in books) 
   {
-    let resRevs = [];
-    for (rev in books[req.params.isbn].reviews)
-    {
-        resRevs.push(books[req.params.isbn].reviews[rev]);
-    }
-    return res.send(JSON.stringify(resRevs)).status(200);
+    return res.send(JSON.stringify(books[req.params.isbn].reviews)).status(200);
   }
   else
   {

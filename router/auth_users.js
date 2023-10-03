@@ -56,7 +56,42 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  return res.status(300).json({message: req.session.authorization.username});
+  if (req.params.isbn in books) 
+  {
+    if (req.session.authorization.username in books[req.params.isbn].reviews)
+    {
+        books[req.params.isbn].reviews[req.session.authorization.username].text = req.query.text;
+        return res.status(200).json({message:"Review updated"})    
+    }
+    else
+    {
+        let rev = {};
+        rev["text"] = req.query.text;
+        books[req.params.isbn].reviews[`${req.session.authorization.username}`] = rev;
+        return res.status(200).json({message:"Review added"})    
+    }
+  }
+  return res.status(404).json({message: "ISBN not found"});
+  
+});
+  
+  regd_users.delete("/auth/review/:isbn", (req, res) => {
+    //Write your code here
+    if (req.params.isbn in books) 
+    {
+      if (req.session.authorization.username in books[req.params.isbn].reviews)
+      {
+          delete books[req.params.isbn].reviews[req.session.authorization.username];
+          return res.status(200).json({message:"Review deleted"})    
+      }
+      else
+      {
+        return res.status(404).json({message: "Review not found"});
+      }
+    }
+  
+  return res.status(404).json({message: "ISBN not found"});
+  
 });
 
 module.exports.authenticated = regd_users;
