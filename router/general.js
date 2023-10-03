@@ -25,8 +25,7 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  res.send(JSON.stringify(books));
-  return res.status(200).json({message: "OK"});
+  return res.send(JSON.stringify(books)).status(200);
 });
 
 // Get book details based on ISBN
@@ -34,8 +33,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
   if (req.params.isbn in books) 
   {
-    res.send(JSON.stringify(books[req.params.isbn]));
-    return res.status(200).json({message: "OK"});
+    return res.send(JSON.stringify(books[req.params.isbn])).status(200);
   }
   
   return res.status(404).json({message: "ISBN not found"});
@@ -53,8 +51,7 @@ public_users.get('/author/:author',function (req, res) {
     }
   }
 
-  res.send(JSON.stringify(resBooks));
-  return res.status(200).json({message: "OK"});
+  return res.send(JSON.stringify(resBooks)).status(200);
 });
 
 // Get all books based on title
@@ -69,8 +66,7 @@ public_users.get('/title/:title',function (req, res) {
     }
   }
 
-  res.send(JSON.stringify(resBooks));
-  return res.status(200).json({message: "OK"});
+  return res.send(JSON.stringify(resBooks)).status(200);
 });
 
 //  Get book review
