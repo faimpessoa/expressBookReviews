@@ -131,15 +131,13 @@ public_users.get('/author/:author',function (req, res) {
         }
 
         return res.status(resp_data[0]).json({errmessage:resp_data[1]});
-    });
-
-      
-    return res.send(JSON.stringify(resBooks)).status(200);
+        });
   });
   
 
 
 // Get all books based on title
+/*
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
   let resBooks = [];
@@ -153,6 +151,42 @@ public_users.get('/title/:title',function (req, res) {
 
   return res.send(JSON.stringify(resBooks)).status(200);
 });
+*/
+
+public_users.get('/title/:title',function (req, res) {
+    //Write your code here
+    const promGetByTitle = new Promise((resolve, reject) => {
+
+        let resBooks = [];
+        for (const bk in books)
+        {
+            if (books[bk].title === req.params.title)
+            {
+            resBooks.push(books[bk]);
+            }
+        }
+
+        if (resBooks.length > 0) 
+        {
+            resolve([200, JSON.stringify(resBooks)]);
+        }
+        else
+        {
+            resolve([404, "No title found: " + req.params.title]);
+        }
+        
+      });
+
+      promGetByTitle.then((resp_data) => {
+        if (resp_data[0] == 200)
+        {  
+            return res.send(resp_data[1]).status(resp_data[0]);
+        }
+
+        return res.status(resp_data[0]).json({errmessage:resp_data[1]});
+        });
+  });
+
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
